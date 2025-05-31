@@ -52,10 +52,10 @@ module BouncingLED(
 			
 		if (!KEY_0) begin //Reset
 			position <= 32'sd1000;
-			velocity <= 32'sh0F000000;
+			velocity <= 32'sh03000000;
 		end
 		if (!KEY_1) //Use key 1 to add some velocity
-			velocity <= (velocity <= 32'sb0) ? velocity + 32'sh07000000 : -velocity + 32'sh07000000;
+			velocity <= (velocity <= 32'sb0) ? velocity + 32'sh03000000 : 32'sh03000000; //If falling, set velocity to small addand. If rising, add small addand
 	
 		//Subtract a little from the velocity each time step.
 		//Switch between a low estimate and high estimate each time
@@ -74,7 +74,8 @@ module BouncingLED(
 			
 			//Bounce off floor
 			if ((position <= FLOOR) && (velocity < 0)) begin
-				velocity <= -(velocity >>> 1);
+//				velocity <= -(velocity >>> 1);
+				velocity <= -((velocity >>> 2) * 3);
 //				velocity <= -(velocity  >>> 2);
 				position <= 32'sh00000100;
 			end
@@ -90,63 +91,55 @@ module BouncingLED(
 		
 		
 	end
-
 	
-//	always @(*) begin
-//		case(position_msb) begin
-//			position_msb < 8'd12: LEDR[9:0] = 10'b0000000001;
-			
-
-			
+	
 	always @(*) begin
-		if (position < 32'sd18641351 * 1)
+		if (position < 32'sd1677721 * 1)
 			LEDR[9:0] = 10'b0000000001;
-		else if (position < 32'sd18641351 * 2)
+		else if (position < 32'sd1677721 * 2)
 			LEDR[9:0] = 10'b0000000010;
-		else if (position < 32'sd18641351 * 3)
+		else if (position < 32'sd1677721 * 3)
 			LEDR[9:0] = 10'b0000000100;
-		else if (position < 32'sd18641351 * 4)
+		else if (position < 32'sd1677721 * 4)
 			LEDR[9:0] = 10'b0000001000;
-		else if (position < 32'sd18641351 * 5)
+		else if (position < 32'sd1677721 * 5)
 			LEDR[9:0] = 10'b0000010000;
-		else if (position < 32'sd18641351 * 6)
+		else if (position < 32'sd1677721 * 6)
 			LEDR[9:0] = 10'b0000100000;
-		else if (position < 32'sd18641351 * 7)
+		else if (position < 32'sd1677721 * 7)
 			LEDR[9:0] = 10'b0001000000;
-		else if (position < 32'sd18641351 * 8)
+		else if (position < 32'sd1677721 * 8)
 			LEDR[9:0] = 10'b0010000000;
-		else if (position < 32'sd18641351 * 9)
+		else if (position < 32'sd1677721 * 9)
 			LEDR[9:0] = 10'b0100000000;
 		else
 			LEDR[9:0] = 10'b1000000000;
 	end
-
-//	
-			
+	
 //	always @(*) begin
-//		if (position_msb < 8'sd12)
+//		if (position < 32'sd18641351 * 1)
 //			LEDR[9:0] = 10'b0000000001;
-//		else if (position_msb < 8'sd24)
+//		else if (position < 32'sd18641351 * 2)
 //			LEDR[9:0] = 10'b0000000010;
-//		else if (position_msb < 8'sd36)
+//		else if (position < 32'sd18641351 * 3)
 //			LEDR[9:0] = 10'b0000000100;
-//		else if (position_msb < 8'sd48)
+//		else if (position < 32'sd18641351 * 4)
 //			LEDR[9:0] = 10'b0000001000;
-//		else if (position_msb < 8'sd60)
+//		else if (position < 32'sd18641351 * 5)
 //			LEDR[9:0] = 10'b0000010000;
-//		else if (position_msb < 8'sd72)
+//		else if (position < 32'sd18641351 * 6)
 //			LEDR[9:0] = 10'b0000100000;
-//		else if (position_msb < 8'sd84)
+//		else if (position < 32'sd18641351 * 7)
 //			LEDR[9:0] = 10'b0001000000;
-//		else if (position_msb < 8'sd96)
+//		else if (position < 32'sd18641351 * 8)
 //			LEDR[9:0] = 10'b0010000000;
-//		else if (position_msb < 8'sd108)
+//		else if (position < 32'sd18641351 * 9)
 //			LEDR[9:0] = 10'b0100000000;
 //		else
 //			LEDR[9:0] = 10'b1000000000;
 //	end
-//	
-		
+
+
 	
 	
 		
