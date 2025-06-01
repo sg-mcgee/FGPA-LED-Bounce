@@ -12,7 +12,6 @@ module BouncingLED(
 	
 	//I am operating in a signed q8.24 fixed point arithmetic format.
 	//MSB sign, 7 bits integer, 24 bits decimal
-	
 
 	
 	//KEY Syncronization wires and reg
@@ -70,30 +69,26 @@ module BouncingLED(
 			end
 			
 			//Update position
-			position <= position + (velocity >>> 16);
+			position <= position + (velocity >>> 16); //Close enough
 			
 			//Bounce off floor
 			if ((position <= FLOOR) && (velocity < 0)) begin
-//				velocity <= -(velocity >>> 1);
-				velocity <= -((velocity >>> 2) * 3);
-//				velocity <= -(velocity  >>> 2);
+				velocity <= -((velocity >>> 2) * 3); //Velocity lose 25%
 				position <= 32'sh00000100;
 			end
 			if (position < 32'sb0)
 				position <= 32'sb0;
 			
-			//Bounce off ceiling
+			//Bounce off ceiling (mostly to prevent overflow. At the small scale, ceiling will likely never be reached)
 			if ((position_msb >= CEIL) && (velocity > 0)) begin
 				velocity <= -(velocity);
 				position[31:24] <= CEIL - 1'b1;
 			end
-		end
-		
-		
+		end		
 	end
 	
 	
-	always @(*) begin
+	always @(*) begin //With this representation on LEDs shows roughly 1 meter
 		if (position < 32'sd1677721 * 1)
 			LEDR[9:0] = 10'b0000000001;
 		else if (position < 32'sd1677721 * 2)
@@ -115,31 +110,6 @@ module BouncingLED(
 		else
 			LEDR[9:0] = 10'b1000000000;
 	end
-	
-//	always @(*) begin
-//		if (position < 32'sd18641351 * 1)
-//			LEDR[9:0] = 10'b0000000001;
-//		else if (position < 32'sd18641351 * 2)
-//			LEDR[9:0] = 10'b0000000010;
-//		else if (position < 32'sd18641351 * 3)
-//			LEDR[9:0] = 10'b0000000100;
-//		else if (position < 32'sd18641351 * 4)
-//			LEDR[9:0] = 10'b0000001000;
-//		else if (position < 32'sd18641351 * 5)
-//			LEDR[9:0] = 10'b0000010000;
-//		else if (position < 32'sd18641351 * 6)
-//			LEDR[9:0] = 10'b0000100000;
-//		else if (position < 32'sd18641351 * 7)
-//			LEDR[9:0] = 10'b0001000000;
-//		else if (position < 32'sd18641351 * 8)
-//			LEDR[9:0] = 10'b0010000000;
-//		else if (position < 32'sd18641351 * 9)
-//			LEDR[9:0] = 10'b0100000000;
-//		else
-//			LEDR[9:0] = 10'b1000000000;
-//	end
-
-
 	
 	
 		
