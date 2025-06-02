@@ -45,6 +45,8 @@ module BouncingLED(
 		KEY_B <= KEY_A;
 		KEY_A <= KEY;
 	end
+	//Key edge detection wires and reg
+	wire KEY_1_Edge;
 
 	always @(posedge CLOCK_50) begin
 		time_step_reg <= time_step;
@@ -111,7 +113,11 @@ module BouncingLED(
 			LEDR[9:0] = 10'b1000000000;
 	end
 	
-	
+	EdgeDetector Key1_EdgeDetector(
+		.CLOCK_50(CLOCK_50),
+		.Signal(KEY_1),
+		.Edge(KEY_1_Edge)
+	);
 		
 	Timer_20_48us Timer_20_48us(
 		.CLOCK_50(CLOCK_50),
