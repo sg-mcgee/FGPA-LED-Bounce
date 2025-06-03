@@ -4,4 +4,4 @@ It features:
 -Key syncronization for domain crossing
 -Hex display
 -LED strip visualization
--Edge detection (Implementation pending)
+-Edge detection
