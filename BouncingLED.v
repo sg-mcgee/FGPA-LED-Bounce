@@ -55,8 +55,8 @@ module BouncingLED(
 			position <= 32'sd1000;
 			velocity <= 32'sh03000000;
 		end
-		if (!KEY_1) //Use key 1 to add some velocity
-			velocity <= (velocity <= 32'sb0) ? velocity + 32'sh03000000 : 32'sh03000000; //If falling, set velocity to small addand. If rising, add small addand
+		if (KEY_1_Edge) //Use key 1 to add some velocity
+			velocity <= (velocity <= 32'sb0) ? 32'sh03000000 : velocity + 32'sh03000000; //If falling, set velocity to small addand. If rising, add small addand
 	
 		//Subtract a little from the velocity each time step.
 		//Switch between a low estimate and high estimate each time
